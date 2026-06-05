@@ -21,7 +21,7 @@
 }
 
 body {
-  width: 390px;
+  width: 520px;
   margin: 0;
   background: var(--bg);
   color: var(--ink);
@@ -176,6 +176,7 @@ h1 {
   color: var(--ink);
   background: #fbfcfd;
   font: 12px/1.35 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  min-height: 150px;
 }
 
 .icon-button,
