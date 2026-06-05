@@ -6,6 +6,7 @@ const {
   addVideo,
   capGroupForPath,
   capGuidanceForPage,
+  capHelpForPage,
   capOriginsForPage,
   looksLikeCapPage,
   loomLibraryQuery,
@@ -117,6 +118,13 @@ test("provides Cap page guidance for empty results", () => {
   assert.match(capGuidanceForPage("/dashboard/spaces/space-id"), /workspace/);
   assert.match(capGuidanceForPage("/s/cap-video-id"), /share URL/);
   assert.match(capGuidanceForPage("/dashboard/settings"), /My Caps/);
+});
+
+test("provides Cap page help for adjacent collection views", () => {
+  assert.match(capHelpForPage("/dashboard/caps"), /workspace videos/);
+  assert.match(capHelpForPage("/dashboard/spaces/space-id"), /private Caps/);
+  assert.match(capHelpForPage("/s/cap-video-id"), /single Cap share page/);
+  assert.match(capHelpForPage("/dashboard/settings"), /Cap page/);
 });
 
 test("extracts Cap videos from Next flight state", () => {

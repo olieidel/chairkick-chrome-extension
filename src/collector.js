@@ -493,6 +493,14 @@
     return "Open Cap's My Caps page or a workspace videos page, then collect again.";
   }
 
+  function capHelpForPage(pathname) {
+    const routeKind = capRouteKind(pathname);
+    if (routeKind === "my_caps") return "This is your My Caps view. To collect workspace videos shared by others, open each Cap space and collect again.";
+    if (routeKind === "workspace_caps") return "This is a workspace space view. To collect your own private Caps too, open My Caps and collect again.";
+    if (routeKind === "share") return "This is a single Cap share page. Open My Caps or a workspace space to collect lists in bulk.";
+    return "You are on a Cap page. Open My Caps or one of your workspace spaces, then collect again.";
+  }
+
   function sortedVideos(map) {
     return Array.from(map.values()).sort((a, b) => {
       const groupDelta = GROUP_RANK[b.group] - GROUP_RANK[a.group];
@@ -521,6 +529,7 @@
       return {
         ...emptyResult(true, []),
         guidance: capGuidanceForPage(location.pathname),
+        help: capHelpForPage(location.pathname),
         videos: sortedVideos(map)
       };
     }
@@ -534,6 +543,7 @@
       addVideo,
       capGroupForPath,
       capGuidanceForPage,
+      capHelpForPage,
       capOriginsForPage,
       looksLikeCapPage,
       scanCapStateVideos,

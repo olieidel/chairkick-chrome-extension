@@ -14,7 +14,10 @@
           <p id="page-label">Current tab</p>
         </div>
         <button id="refresh" class="icon-button" type="button" title="Collect again" aria-label="Collect again">
-          <span aria-hidden="true">R</span>
+          <svg aria-hidden="true" viewBox="0 0 24 24">
+            <path d="M20 12a8 8 0 1 1-2.34-5.66" />
+            <path d="M20 4v6h-6" />
+          </svg>
         </button>
       </header>
 
@@ -29,6 +32,7 @@
       </section>
 
       <section id="results" class="results" hidden>
+        <div id="result-help" class="result-help" hidden></div>
         <div id="copy-lists" class="copy-lists" hidden></div>
       </section>
 

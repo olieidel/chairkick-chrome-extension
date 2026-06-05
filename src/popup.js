@@ -4,6 +4,7 @@ const progressTrackEl = document.getElementById("progress-track");
 const progressBarEl = document.getElementById("progress-bar");
 const resultsEl = document.getElementById("results");
 const warningsEl = document.getElementById("warnings");
+const resultHelpEl = document.getElementById("result-help");
 const copyListsEl = document.getElementById("copy-lists");
 const pageLabelEl = document.getElementById("page-label");
 const refreshButton = document.getElementById("refresh");
@@ -34,6 +35,7 @@ async function collectFromActiveTab() {
   setProgress({ label: "Starting collection", percent: 3 });
   resultsEl.hidden = true;
   warningsEl.hidden = true;
+  resultHelpEl.hidden = true;
   copyListsEl.hidden = true;
 
   try {
@@ -122,9 +124,9 @@ function renderResult(result) {
 
   activeRunId = null;
   setCollecting(false);
-  setStatus("");
-  statusEl.hidden = true;
+  hideStatus();
   resultsEl.hidden = false;
+  renderResultHelp(result);
   renderCopyLists(videos);
 }
 
@@ -132,6 +134,18 @@ function renderWarnings(warnings) {
   const filtered = (warnings || []).filter(Boolean);
   warningsEl.hidden = filtered.length === 0;
   warningsEl.textContent = filtered.join(" ");
+}
+
+function renderResultHelp(result) {
+  const help = result && result.help;
+  if (!help) {
+    resultHelpEl.hidden = true;
+    resultHelpEl.textContent = "";
+    return;
+  }
+
+  resultHelpEl.textContent = help;
+  resultHelpEl.hidden = false;
 }
 
 function renderCopyLists(videos) {
@@ -223,8 +237,17 @@ async function copyListUrls(event) {
 function setStatus(message) {
   statusEl.classList.remove("is-loading");
   progressTrackEl.hidden = true;
-  statusEl.hidden = !message;
+  progressBarEl.style.width = "0";
   statusLabelEl.textContent = message;
+  statusEl.hidden = !message;
+}
+
+function hideStatus() {
+  statusEl.classList.remove("is-loading");
+  progressTrackEl.hidden = true;
+  progressBarEl.style.width = "0";
+  statusLabelEl.textContent = "";
+  statusEl.hidden = true;
 }
 
 function setCollecting(collecting) {
