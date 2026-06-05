@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Chairkick Collector</title>
+    <link rel="stylesheet" href="src/popup.css">
+  </head>
+  <body>
+    <main class="shell">
+      <header class="topbar">
+        <div>
+          <h1>Chairkick Collector</h1>
+          <p id="page-label">Current tab</p>
+        </div>
+        <button id="refresh" class="icon-button" type="button" title="Collect again" aria-label="Collect again">
+          <span aria-hidden="true">R</span>
+        </button>
+      </header>
+
+      <section id="status" class="status" role="status" aria-live="polite">
+        <span id="status-spinner" class="spinner" aria-hidden="true"></span>
+        <div class="status-copy">
+          <span id="status-label">Collecting videos...</span>
+          <div id="progress-track" class="progress-track" hidden>
+            <span id="progress-bar" class="progress-bar"></span>
+          </div>
+        </div>
+      </section>
+
+      <section id="results" class="results" hidden>
+        <div class="result-actions">
+          <label class="checkline">
+            <input id="toggle-all" type="checkbox" checked>
+            <span id="result-count">0 videos</span>
+          </label>
+          <button id="copy" class="primary-button" type="button">Copy selected URLs</button>
+        </div>
+        <div id="copy-lists" class="copy-lists" hidden></div>
+        <div id="groups" class="groups"></div>
+      </section>
+
+      <section id="warnings" class="warnings" hidden></section>
+    </main>
+    <script src="src/popup.js"></script>
+  </body>
+</html>

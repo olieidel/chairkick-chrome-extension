@@ -1,0 +1,15 @@
+{
+  "manifest_version": 3,
+  "name": "Chairkick Loom/Cap Collector",
+  "description": "Collect Loom and Cap share URLs from the current tab for Chairkick imports.",
+  "version": "0.1.0",
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Collect videos for Chairkick"
+  },
+  "permissions": [
+    "activeTab",
+    "clipboardWrite",
+    "scripting"
+  ]
+}
