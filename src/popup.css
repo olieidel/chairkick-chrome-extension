@@ -36,8 +36,7 @@ input {
   padding: 14px;
 }
 
-.topbar,
-.result-actions {
+.topbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -133,27 +132,9 @@ h1 {
   overflow: hidden;
 }
 
-.result-actions {
-  border-bottom: 1px solid var(--line);
-  padding: 10px;
-}
-
-.checkline {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  color: var(--muted);
-}
-
-.groups {
-  max-height: 370px;
-  overflow: auto;
-}
-
 .copy-lists {
   display: grid;
   gap: 10px;
-  border-bottom: 1px solid var(--line);
   padding: 10px;
 }
 
@@ -193,64 +174,8 @@ h1 {
   font: 12px/1.35 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 }
 
-.group {
-  border-top: 1px solid var(--line);
-}
-
-.group:first-child {
-  border-top: 0;
-}
-
-.group h2 {
-  padding: 9px 10px 7px;
-  color: var(--muted);
-  font-size: 12px;
-  font-weight: 650;
-  text-transform: uppercase;
-}
-
-.video-row {
-  display: grid;
-  grid-template-columns: 20px minmax(0, 1fr);
-  gap: 8px;
-  min-height: 54px;
-  padding: 8px 10px;
-  border-top: 1px solid var(--line);
-  cursor: pointer;
-}
-
-.video-row:hover {
-  background: #f3f6f8;
-}
-
-.video-row input {
-  margin-top: 4px;
-}
-
-.video-body {
-  display: grid;
-  min-width: 0;
-}
-
-.video-title,
-.video-meta {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.video-title {
-  font-weight: 600;
-}
-
-.video-meta {
-  color: var(--muted);
-  font-size: 12px;
-}
-
 .icon-button,
-.primary-button,
-.secondary-button {
+.primary-button {
   border: 1px solid var(--line-strong);
   border-radius: 7px;
   background: var(--panel);
@@ -281,6 +206,6 @@ h1 {
   cursor: not-allowed;
 }
 
-.secondary-button {
-  padding: 7px 10px;
+.copy-list-button {
+  padding: 6px 12px;
 }

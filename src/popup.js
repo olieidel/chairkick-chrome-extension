@@ -5,16 +5,10 @@ const progressBarEl = document.getElementById("progress-bar");
 const resultsEl = document.getElementById("results");
 const warningsEl = document.getElementById("warnings");
 const copyListsEl = document.getElementById("copy-lists");
-const groupsEl = document.getElementById("groups");
 const pageLabelEl = document.getElementById("page-label");
-const resultCountEl = document.getElementById("result-count");
-const toggleAllEl = document.getElementById("toggle-all");
-const copyButton = document.getElementById("copy");
 const refreshButton = document.getElementById("refresh");
 
-let currentVideos = [];
 let activeRunId = null;
-let isCollecting = false;
 
 document.addEventListener("DOMContentLoaded", () => {
   bindEvents();
@@ -23,14 +17,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function bindEvents() {
   refreshButton.addEventListener("click", collectFromActiveTab);
-  copyButton.addEventListener("click", copySelectedUrls);
-  toggleAllEl.addEventListener("change", () => {
-    for (const checkbox of groupsEl.querySelectorAll("input[type='checkbox']")) {
-      checkbox.checked = toggleAllEl.checked;
-    }
-    syncSelectedCount();
-  });
-  groupsEl.addEventListener("change", syncSelectedCount);
   copyListsEl.addEventListener("click", copyListUrls);
   chrome.runtime.onMessage.addListener(handleRuntimeMessage);
 }
@@ -49,7 +35,6 @@ async function collectFromActiveTab() {
   resultsEl.hidden = true;
   warningsEl.hidden = true;
   copyListsEl.hidden = true;
-  currentVideos = [];
 
   try {
     const tab = await activeTab();
@@ -114,7 +99,6 @@ function handleRuntimeMessage(message) {
 
 function renderResult(result) {
   const videos = Array.isArray(result && result.videos) ? result.videos : [];
-  currentVideos = videos;
 
   pageLabelEl.textContent = result && result.page && result.page.host
     ? result.page.host
@@ -142,41 +126,12 @@ function renderResult(result) {
   statusEl.hidden = true;
   resultsEl.hidden = false;
   renderCopyLists(videos);
-  renderGroups(videos);
-  syncSelectedCount();
 }
 
 function renderWarnings(warnings) {
   const filtered = (warnings || []).filter(Boolean);
   warningsEl.hidden = filtered.length === 0;
   warningsEl.textContent = filtered.join(" ");
-}
-
-function renderGroups(videos) {
-  groupsEl.textContent = "";
-  const labels = {
-    authored: "Authored by you",
-    shared: "Shared with you",
-    unknown: "Unknown ownership"
-  };
-
-  for (const group of ["authored", "shared", "unknown"]) {
-    const groupVideos = videos.filter((video) => video.group === group);
-    if (groupVideos.length === 0) continue;
-
-    const section = document.createElement("section");
-    section.className = "group";
-
-    const heading = document.createElement("h2");
-    heading.textContent = `${labels[group]} (${groupVideos.length})`;
-    section.appendChild(heading);
-
-    for (const video of groupVideos) {
-      section.appendChild(videoRow(video));
-    }
-
-    groupsEl.appendChild(section);
-  }
 }
 
 function renderCopyLists(videos) {
@@ -216,6 +171,10 @@ function copyListDefinitions(videos) {
       {
         title: `Workspace ${source.name} videos`,
         videos: sourceVideos.filter((video) => video.group === "shared")
+      },
+      {
+        title: `Other ${source.name} videos`,
+        videos: sourceVideos.filter((video) => video.group === "unknown")
       }
     ];
   }).filter((list) => list.videos.length > 0);
@@ -232,7 +191,7 @@ function copyListPanel(list) {
   title.textContent = `${list.title} (${list.videos.length})`;
 
   const button = document.createElement("button");
-  button.className = "secondary-button copy-list-button";
+  button.className = "primary-button copy-list-button";
   button.type = "button";
   button.dataset.urls = list.videos.map((video) => video.url).join("\n");
   button.textContent = "Copy";
@@ -261,55 +220,6 @@ async function copyListUrls(event) {
   statusEl.hidden = false;
 }
 
-function videoRow(video) {
-  const label = document.createElement("label");
-  label.className = "video-row";
-
-  const checkbox = document.createElement("input");
-  checkbox.type = "checkbox";
-  checkbox.value = video.url;
-  checkbox.checked = true;
-
-  const body = document.createElement("span");
-  body.className = "video-body";
-
-  const title = document.createElement("span");
-  title.className = "video-title";
-  title.textContent = video.title || video.url;
-
-  const meta = document.createElement("span");
-  meta.className = "video-meta";
-  meta.textContent = video.url;
-
-  body.append(title, meta);
-  label.append(checkbox, body);
-  return label;
-}
-
-function selectedUrls() {
-  return Array.from(groupsEl.querySelectorAll("input[type='checkbox']:checked"))
-    .map((checkbox) => checkbox.value);
-}
-
-function syncSelectedCount() {
-  const selected = selectedUrls().length;
-  const total = currentVideos.length;
-  resultCountEl.textContent = `${selected} of ${total} selected`;
-  copyButton.disabled = selected === 0;
-  if (isCollecting) copyButton.disabled = true;
-  toggleAllEl.checked = selected === total && total > 0;
-  toggleAllEl.indeterminate = selected > 0 && selected < total;
-}
-
-async function copySelectedUrls() {
-  const urls = selectedUrls();
-  if (urls.length === 0) return;
-
-  await navigator.clipboard.writeText(urls.join("\n"));
-  setStatus(`Copied ${urls.length} URL${urls.length === 1 ? "" : "s"}.`);
-  statusEl.hidden = false;
-}
-
 function setStatus(message) {
   statusEl.classList.remove("is-loading");
   progressTrackEl.hidden = true;
@@ -318,9 +228,7 @@ function setStatus(message) {
 }
 
 function setCollecting(collecting) {
-  isCollecting = collecting;
   refreshButton.disabled = collecting;
-  copyButton.disabled = collecting || selectedUrls().length === 0;
 }
 
 function setProgress(progress) {
