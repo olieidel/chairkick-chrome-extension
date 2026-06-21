@@ -224,6 +224,24 @@ h1 {
   padding: 6px 12px;
 }
 
+.send-actions {
+  display: grid;
+  gap: 6px;
+  padding: 12px 10px;
+  border-bottom: 1px solid var(--line);
+}
+
+.send-actions .primary-button {
+  width: 100%;
+  padding: 9px 10px;
+}
+
+.send-hint {
+  margin: 0;
+  color: var(--muted);
+  font-size: 12px;
+}
+
 .result-help {
   border-bottom: 1px solid var(--line);
   padding: 10px;

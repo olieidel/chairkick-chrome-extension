@@ -8,8 +8,13 @@ const resultHelpEl = document.getElementById("result-help");
 const copyListsEl = document.getElementById("copy-lists");
 const pageLabelEl = document.getElementById("page-label");
 const refreshButton = document.getElementById("refresh");
+const sendActionsEl = document.getElementById("send-actions");
+const sendButton = document.getElementById("send-to-chairkick");
+
+const CHAIRKICK_ORIGIN = "https://chairkick.com";
 
 let activeRunId = null;
+let lastVideos = [];
 
 document.addEventListener("DOMContentLoaded", () => {
   bindEvents();
@@ -19,6 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
 function bindEvents() {
   refreshButton.addEventListener("click", collectFromActiveTab);
   copyListsEl.addEventListener("click", copyListUrls);
+  sendButton.addEventListener("click", sendToChairkick);
   chrome.runtime.onMessage.addListener(handleRuntimeMessage);
 }
 
@@ -37,6 +43,8 @@ async function collectFromActiveTab() {
   warningsEl.hidden = true;
   resultHelpEl.hidden = true;
   copyListsEl.hidden = true;
+  sendActionsEl.hidden = true;
+  lastVideos = [];
 
   try {
     const tab = await activeTab();
@@ -126,6 +134,8 @@ function renderResult(result) {
   setCollecting(false);
   hideStatus();
   resultsEl.hidden = false;
+  lastVideos = videos;
+  sendActionsEl.hidden = false;
   renderResultHelp(result);
   renderCopyLists(videos);
 }
@@ -219,6 +229,36 @@ function copyListPanel(list) {
 
   panel.append(header, textarea);
   return panel;
+}
+
+async function sendToChairkick() {
+  if (!lastVideos.length) return;
+
+  sendButton.disabled = true;
+  setStatus("Sending to Chairkick…");
+
+  try {
+    const response = await fetch(`${CHAIRKICK_ORIGIN}/import_handoffs`, {
+      method: "POST",
+      headers: { "content-type": "application/json", "accept": "application/json" },
+      body: JSON.stringify({
+        source: lastVideos[0].source,
+        videos: lastVideos.map((video) => ({ url: video.url, title: video.title || "" }))
+      })
+    });
+
+    if (!response.ok) throw new Error(`Chairkick responded with ${response.status}.`);
+
+    const data = await response.json();
+    if (!data || !data.url) throw new Error("Chairkick did not return an import link.");
+
+    await chrome.tabs.create({ url: data.url });
+    setStatus(`Opened Chairkick with ${lastVideos.length} video${lastVideos.length === 1 ? "" : "s"}.`);
+  } catch (error) {
+    setStatus(error.message || "Could not reach Chairkick. Use the copy lists instead.");
+  } finally {
+    sendButton.disabled = false;
+  }
 }
 
 async function copyListUrls(event) {
