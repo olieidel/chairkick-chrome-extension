@@ -265,8 +265,20 @@
     });
 
     const payload = await response.json().catch(() => ({}));
-    if (!response.ok) throw new Error(`Loom ${source} request failed with ${response.status}`);
-    if (payload.errors && payload.errors.length) throw new Error(`Loom ${source} returned GraphQL errors`);
+    if (response.status === 401 || response.status === 403) {
+      throw new Error("Loom says you are logged out. Log in at loom.com, then collect again.");
+    }
+    if (!response.ok) throw new Error(`Loom ${source} request failed with ${response.status}.`);
+    if (payload.errors && payload.errors.length) {
+      const unauthenticated = payload.errors.some((error) => {
+        const code = error && error.extensions && error.extensions.code;
+        return code === "UNAUTHENTICATED" || code === "FORBIDDEN";
+      });
+      if (unauthenticated) {
+        throw new Error("Loom says you are logged out. Log in at loom.com, then collect again.");
+      }
+      throw new Error(`Loom ${source} returned GraphQL errors.`);
+    }
     return payload;
   }
 
@@ -321,7 +333,7 @@
       foundCount: videos.length
     });
 
-    return videos;
+    return { videos, truncated: Boolean(cursor) };
   }
 
   async function collectLoom(options) {
@@ -339,12 +351,16 @@
 
     let mineVideos = [];
     try {
-      mineVideos = await queryLoomLibrary("MINE", options.maxLoomPages || 50, options, {
+      const mine = await queryLoomLibrary("MINE", options.maxLoomPages || 50, options, {
         label: "Fetching authored Loom videos",
         startPercent: 20,
         endPercent: 50
       });
+      mineVideos = mine.videos;
       for (const video of mineVideos) addVideo(map, video);
+      if (mine.truncated) {
+        warnings.push(`Stopped after ${mineVideos.length} authored Loom videos; the list may be incomplete.`);
+      }
       emitProgress(options, {
         label: `${map.size} Loom videos found`,
         percent: 52,
@@ -356,16 +372,19 @@
 
     const authoredIds = new Set(mineVideos.map((video) => video.id));
     try {
-      const allVideos = await queryLoomLibrary("ALL", options.maxLoomPages || 50, options, {
+      const all = await queryLoomLibrary("ALL", options.maxLoomPages || 50, options, {
         label: "Fetching shared Loom videos",
         startPercent: 55,
         endPercent: 92
       });
-      for (const video of allVideos) {
+      for (const video of all.videos) {
         addVideo(map, {
           ...video,
           group: authoredIds.has(video.id) ? "authored" : "shared"
         });
+      }
+      if (all.truncated) {
+        warnings.push(`Stopped after ${all.videos.length} shared Loom videos; the list may be incomplete.`);
       }
       emitProgress(options, {
         label: `${map.size} Loom videos found`,
@@ -384,6 +403,7 @@
 
     return {
       ...emptyResult(true, warnings),
+      guidance: "No Loom videos found. Check that you are logged in at loom.com, then collect again.",
       videos: sortedVideos(map)
     };
   }
@@ -541,6 +561,8 @@
     collect,
     __internals: {
       addVideo,
+      fetchLoomPage,
+      queryLoomLibrary,
       capGroupForPath,
       capGuidanceForPage,
       capHelpForPage,

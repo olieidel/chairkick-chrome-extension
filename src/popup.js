@@ -8,13 +8,16 @@ const resultHelpEl = document.getElementById("result-help");
 const copyListsEl = document.getElementById("copy-lists");
 const pageLabelEl = document.getElementById("page-label");
 const refreshButton = document.getElementById("refresh");
-const sendActionsEl = document.getElementById("send-actions");
-const sendButton = document.getElementById("send-to-chairkick");
+const emptyActionsEl = document.getElementById("empty-actions");
+const openLoomButton = document.getElementById("open-loom");
+const openCapButton = document.getElementById("open-cap");
 
 const CHAIRKICK_ORIGIN = "https://chairkick.com";
+const LOOM_LIBRARY_URL = "https://www.loom.com/looms/videos";
+const CAP_LIBRARY_URL = "https://cap.so/dashboard/caps";
+const MAX_IMPORT_VIDEOS = 500;
 
 let activeRunId = null;
-let lastVideos = [];
 
 document.addEventListener("DOMContentLoaded", () => {
   bindEvents();
@@ -23,8 +26,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function bindEvents() {
   refreshButton.addEventListener("click", collectFromActiveTab);
-  copyListsEl.addEventListener("click", copyListUrls);
-  sendButton.addEventListener("click", sendToChairkick);
+  copyListsEl.addEventListener("click", handleListAction);
+  openLoomButton.addEventListener("click", () => chrome.tabs.create({ url: LOOM_LIBRARY_URL }));
+  openCapButton.addEventListener("click", () => chrome.tabs.create({ url: CAP_LIBRARY_URL }));
   chrome.runtime.onMessage.addListener(handleRuntimeMessage);
 }
 
@@ -43,8 +47,7 @@ async function collectFromActiveTab() {
   warningsEl.hidden = true;
   resultHelpEl.hidden = true;
   copyListsEl.hidden = true;
-  sendActionsEl.hidden = true;
-  lastVideos = [];
+  emptyActionsEl.hidden = true;
 
   try {
     const tab = await activeTab();
@@ -97,6 +100,7 @@ async function collectFromActiveTab() {
     activeRunId = null;
     setCollecting(false);
     setStatus(error.message || "Could not collect videos from this tab.");
+    emptyActionsEl.hidden = false;
   }
 }
 
@@ -120,6 +124,7 @@ function renderResult(result) {
     activeRunId = null;
     setCollecting(false);
     setStatus("Open Loom, or open Cap's My Caps or workspace videos page, then collect again.");
+    emptyActionsEl.hidden = false;
     return;
   }
 
@@ -134,14 +139,12 @@ function renderResult(result) {
   setCollecting(false);
   hideStatus();
   resultsEl.hidden = false;
-  lastVideos = videos;
-  sendActionsEl.hidden = false;
   renderResultHelp(result);
   renderCopyLists(videos);
 }
 
 function renderWarnings(warnings) {
-  const filtered = (warnings || []).filter(Boolean);
+  const filtered = Array.from(new Set((warnings || []).filter(Boolean)));
   warningsEl.hidden = filtered.length === 0;
   warningsEl.textContent = filtered.join(" ");
 }
@@ -160,6 +163,7 @@ function renderResultHelp(result) {
 
 function renderCopyLists(videos) {
   copyListsEl.textContent = "";
+  panelLists.clear();
 
   const lists = copyListDefinitions(videos);
 
@@ -171,6 +175,11 @@ function renderCopyLists(videos) {
   const heading = document.createElement("h2");
   heading.textContent = "Import lists";
   copyListsEl.appendChild(heading);
+
+  const hint = document.createElement("p");
+  hint.className = "lists-hint";
+  hint.textContent = "Imported videos are saved under your name as the creator — send only lists of videos you recorded.";
+  copyListsEl.appendChild(hint);
 
   for (const list of lists) {
     copyListsEl.appendChild(copyListPanel(list));
@@ -190,23 +199,32 @@ function copyListDefinitions(videos) {
     return [
       {
         title: `My ${source.name} videos`,
+        source: source.key,
         videos: sourceVideos.filter((video) => video.group === "authored")
       },
       {
         title: `Workspace ${source.name} videos`,
+        source: source.key,
         videos: sourceVideos.filter((video) => video.group === "shared")
       },
       {
         title: `Other ${source.name} videos`,
+        source: source.key,
         videos: sourceVideos.filter((video) => video.group === "unknown")
       }
     ];
   }).filter((list) => list.videos.length > 0);
 }
 
+const panelLists = new Map();
+
 function copyListPanel(list) {
   const panel = document.createElement("section");
   panel.className = "copy-list";
+
+  const panelId = `list-${panelLists.size}`;
+  panelLists.set(panelId, list);
+  panel.dataset.listId = panelId;
 
   const header = document.createElement("div");
   header.className = "copy-list-head";
@@ -214,13 +232,21 @@ function copyListPanel(list) {
   const title = document.createElement("h3");
   title.textContent = `${list.title} (${list.videos.length})`;
 
-  const button = document.createElement("button");
-  button.className = "primary-button copy-list-button";
-  button.type = "button";
-  button.dataset.urls = list.videos.map((video) => video.url).join("\n");
-  button.textContent = "Copy";
+  const buttons = document.createElement("div");
+  buttons.className = "copy-list-buttons";
 
-  header.append(title, button);
+  const sendButton = document.createElement("button");
+  sendButton.className = "primary-button send-list-button";
+  sendButton.type = "button";
+  sendButton.textContent = "Send to Chairkick";
+
+  const copyButton = document.createElement("button");
+  copyButton.className = "secondary-button copy-list-button";
+  copyButton.type = "button";
+  copyButton.textContent = "Copy";
+
+  buttons.append(sendButton, copyButton);
+  header.append(title, buttons);
 
   const textarea = document.createElement("textarea");
   textarea.readOnly = true;
@@ -228,22 +254,44 @@ function copyListPanel(list) {
   textarea.value = list.videos.map((video) => video.url).join("\n");
 
   panel.append(header, textarea);
+
+  if (list.videos.length > MAX_IMPORT_VIDEOS) {
+    const note = document.createElement("p");
+    note.className = "copy-list-note";
+    note.textContent = `Chairkick imports the first ${MAX_IMPORT_VIDEOS} links per send — copy the list and import the rest in batches.`;
+    panel.appendChild(note);
+  }
+
   return panel;
 }
 
-async function sendToChairkick() {
-  if (!lastVideos.length) return;
+function handleListAction(event) {
+  const panel = event.target.closest(".copy-list");
+  if (!panel) return;
 
-  sendButton.disabled = true;
-  setStatus("Sending to Chairkick…");
+  const list = panelLists.get(panel.dataset.listId);
+  if (!list) return;
+
+  if (event.target.closest(".send-list-button")) {
+    sendListToChairkick(list, event.target.closest(".send-list-button"));
+  } else if (event.target.closest(".copy-list-button")) {
+    copyListUrls(list);
+  }
+}
+
+async function sendListToChairkick(list, button) {
+  if (!list.videos.length) return;
+
+  button.disabled = true;
+  setStatus(`Sending ${list.title.toLowerCase()} to Chairkick…`);
 
   try {
     const response = await fetch(`${CHAIRKICK_ORIGIN}/import_handoffs`, {
       method: "POST",
       headers: { "content-type": "application/json", "accept": "application/json" },
       body: JSON.stringify({
-        source: lastVideos[0].source,
-        videos: lastVideos.map((video) => ({ url: video.url, title: video.title || "" }))
+        source: list.source,
+        videos: list.videos.map((video) => ({ url: video.url, title: video.title || "" }))
       })
     });
 
@@ -253,23 +301,20 @@ async function sendToChairkick() {
     if (!data || !data.url) throw new Error("Chairkick did not return an import link.");
 
     await chrome.tabs.create({ url: data.url });
-    setStatus(`Opened Chairkick with ${lastVideos.length} video${lastVideos.length === 1 ? "" : "s"}.`);
+    setStatus(`Opened Chairkick with ${data.count || list.videos.length} video${(data.count || list.videos.length) === 1 ? "" : "s"}.`);
   } catch (error) {
     setStatus(error.message || "Could not reach Chairkick. Use the copy lists instead.");
   } finally {
-    sendButton.disabled = false;
+    button.disabled = false;
   }
 }
 
-async function copyListUrls(event) {
-  const button = event.target.closest(".copy-list-button");
-  if (!button) return;
-
-  const urls = button.dataset.urls || "";
+async function copyListUrls(list) {
+  const urls = list.videos.map((video) => video.url).join("\n");
   if (!urls) return;
 
   await navigator.clipboard.writeText(urls);
-  const count = urls.split("\n").filter(Boolean).length;
+  const count = list.videos.length;
   setStatus(`Copied ${count} URL${count === 1 ? "" : "s"}.`);
   statusEl.hidden = false;
 }

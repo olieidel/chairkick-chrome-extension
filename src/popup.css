@@ -180,7 +180,8 @@ h1 {
 }
 
 .icon-button,
-.primary-button {
+.primary-button,
+.secondary-button {
   border: 1px solid var(--line-strong);
   border-radius: 7px;
   background: var(--panel);
@@ -220,26 +221,42 @@ h1 {
   cursor: not-allowed;
 }
 
-.copy-list-button {
+.secondary-button {
+  padding: 7px 10px;
+  font-weight: 650;
+}
+
+.copy-list-buttons {
+  display: flex;
+  flex: 0 0 auto;
+  gap: 6px;
+}
+
+.copy-list-button,
+.send-list-button {
   padding: 6px 12px;
 }
 
-.send-actions {
-  display: grid;
-  gap: 6px;
-  padding: 12px 10px;
-  border-bottom: 1px solid var(--line);
+.copy-list-note {
+  margin: 0;
+  color: var(--warn-ink);
+  font-size: 12px;
 }
 
-.send-actions .primary-button {
-  width: 100%;
-  padding: 9px 10px;
-}
-
-.send-hint {
+.lists-hint {
   margin: 0;
   color: var(--muted);
   font-size: 12px;
+}
+
+.empty-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.empty-actions .secondary-button {
+  flex: 1;
+  padding: 9px 10px;
 }
 
 .result-help {

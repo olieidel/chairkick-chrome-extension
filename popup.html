@@ -3,14 +3,14 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Chairkick Collector</title>
+    <title>Chairkick: Export Loom &amp; Cap Videos</title>
     <link rel="stylesheet" href="src/popup.css">
   </head>
   <body>
     <main class="shell">
       <header class="topbar">
         <div>
-          <h1>Chairkick Collector</h1>
+          <h1>Chairkick Exporter</h1>
           <p id="page-label">Current tab</p>
         </div>
         <button id="refresh" class="icon-button" type="button" title="Collect again" aria-label="Collect again">
@@ -31,12 +31,13 @@
         </div>
       </section>
 
+      <section id="empty-actions" class="empty-actions" hidden>
+        <button id="open-loom" class="secondary-button" type="button">Open Loom</button>
+        <button id="open-cap" class="secondary-button" type="button">Open Cap</button>
+      </section>
+
       <section id="results" class="results" hidden>
         <div id="result-help" class="result-help" hidden></div>
-        <div id="send-actions" class="send-actions" hidden>
-          <button id="send-to-chairkick" class="primary-button" type="button">Send to Chairkick</button>
-          <p class="send-hint">Imported videos are saved under your name as the creator — send only the videos you recorded.</p>
-        </div>
         <div id="copy-lists" class="copy-lists" hidden></div>
       </section>
 

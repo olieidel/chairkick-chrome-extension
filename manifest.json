@@ -1,11 +1,24 @@
 {
   "manifest_version": 3,
-  "name": "Chairkick Loom/Cap Collector",
-  "description": "Collect your Loom and Cap videos and send them to Chairkick to import.",
-  "version": "0.2.0",
+  "name": "Chairkick: Export Loom & Cap Videos",
+  "description": "Export your Loom and Cap videos in one click — back them up or migrate your whole library to Chairkick. Viewers always free.",
+  "version": "0.3.0",
+  "homepage_url": "https://chairkick.com/switch-from-loom",
+  "icons": {
+    "16": "icons/icon-16.png",
+    "32": "icons/icon-32.png",
+    "48": "icons/icon-48.png",
+    "128": "icons/icon-128.png"
+  },
   "action": {
     "default_popup": "popup.html",
-    "default_title": "Collect videos for Chairkick"
+    "default_title": "Export videos to Chairkick",
+    "default_icon": {
+      "16": "icons/icon-16.png",
+      "32": "icons/icon-32.png",
+      "48": "icons/icon-48.png",
+      "128": "icons/icon-128.png"
+    }
   },
   "permissions": [
     "activeTab",

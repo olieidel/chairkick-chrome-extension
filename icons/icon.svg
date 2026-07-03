@@ -1,0 +1,46 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Chairkick: Export Loom &amp; Cap Videos">
+  <defs>
+    <linearGradient id="ckBg" x1="0" y1="0" x2="512" y2="512" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#6366f1"></stop>
+      <stop offset="0.55" stop-color="#7c5cf0"></stop>
+      <stop offset="1" stop-color="#f43f5e"></stop>
+    </linearGradient>
+    <radialGradient id="ckSheen" cx="0.28" cy="0.2" r="0.9">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.20"></stop>
+      <stop offset="0.5" stop-color="#ffffff" stop-opacity="0"></stop>
+    </radialGradient>
+    <clipPath id="ckClip">
+      <rect x="0" y="0" width="512" height="512" rx="118"></rect>
+    </clipPath>
+
+    <g id="ckChair">
+      <rect x="150" y="86" width="46" height="160" rx="23" transform="rotate(-8 173 166)"></rect>
+      <rect x="148" y="262" width="190" height="34" rx="17"></rect>
+      <rect x="226" y="296" width="28" height="78" rx="14"></rect>
+      <rect x="148" y="374" width="190" height="32" rx="16"></rect>
+      <circle cx="170" cy="430" r="15"></circle>
+      <circle cx="214" cy="430" r="15"></circle>
+      <circle cx="258" cy="430" r="15"></circle>
+      <circle cx="302" cy="430" r="15"></circle>
+    </g>
+  </defs>
+
+  <rect x="0" y="0" width="512" height="512" rx="118" fill="url(#ckBg)"></rect>
+  <rect x="0" y="0" width="512" height="512" rx="118" fill="url(#ckSheen)"></rect>
+
+  <g clip-path="url(#ckClip)">
+    <g transform="translate(-44 0)">
+      <use href="#ckChair" transform="translate(116 0)" fill="#ffffff" fill-opacity="0.20"></use>
+      <use href="#ckChair" transform="translate(58 0)" fill="#ffffff" fill-opacity="0.42"></use>
+      <use href="#ckChair" fill="#ffffff"></use>
+    </g>
+  </g>
+
+  <!-- Export badge: marks this as the exporter extension, not the Chairkick app -->
+  <circle cx="378" cy="378" r="118" fill="#ffffff"></circle>
+  <g fill="#4f46e5">
+    <rect x="362" y="304" width="32" height="88" rx="16"></rect>
+    <path d="M330 376 L378 430 L426 376" fill="none" stroke="#4f46e5" stroke-width="32" stroke-linecap="round" stroke-linejoin="round"></path>
+    <rect x="328" y="450" width="100" height="26" rx="13"></rect>
+  </g>
+</svg>

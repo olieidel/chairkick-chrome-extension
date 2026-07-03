@@ -4,6 +4,8 @@ const test = require("node:test");
 const collector = require("../src/collector.js");
 const {
   addVideo,
+  fetchLoomPage,
+  queryLoomLibrary,
   capGroupForPath,
   capGuidanceForPage,
   capHelpForPage,
@@ -94,6 +96,72 @@ test("merges duplicate videos and keeps strongest grouping", () => {
   assert.equal(video.group, "authored");
   assert.equal(video.title, "Demo");
   assert.deepEqual(video.discoveredBy, ["graphql:ALL", "graphql:MINE"]);
+});
+
+function stubFetch(t, handler) {
+  const original = globalThis.fetch;
+  globalThis.fetch = handler;
+  t.after(() => {
+    globalThis.fetch = original;
+  });
+}
+
+function loomPagePayload(ids, hasNextPage) {
+  return {
+    ok: true,
+    status: 200,
+    json: async () => ({
+      data: {
+        getLooms: {
+          videos: {
+            edges: ids.map((id) => ({ node: { id, name: `Video ${id}` } })),
+            pageInfo: { endCursor: ids[ids.length - 1] || null, hasNextPage }
+          }
+        }
+      }
+    })
+  };
+}
+
+test("maps Loom auth failures to a log-in prompt", async (t) => {
+  stubFetch(t, async () => ({ ok: false, status: 401, json: async () => ({}) }));
+
+  await assert.rejects(fetchLoomPage("MINE", null), /Log in at loom\.com/);
+});
+
+test("maps Loom UNAUTHENTICATED GraphQL errors to a log-in prompt", async (t) => {
+  stubFetch(t, async () => ({
+    ok: true,
+    status: 200,
+    json: async () => ({ errors: [{ extensions: { code: "UNAUTHENTICATED" } }] })
+  }));
+
+  await assert.rejects(fetchLoomPage("MINE", null), /Log in at loom\.com/);
+});
+
+test("flags Loom libraries cut off by the pagination cap", async (t) => {
+  let calls = 0;
+  stubFetch(t, async () => {
+    calls += 1;
+    return loomPagePayload([`video-${calls}`], true);
+  });
+
+  const result = await queryLoomLibrary("MINE", 2, null, {});
+
+  assert.equal(calls, 2);
+  assert.equal(result.truncated, true);
+  assert.equal(result.videos.length, 2);
+});
+
+test("reports complete Loom libraries as not truncated", async (t) => {
+  stubFetch(t, async () => loomPagePayload(["only-video"], false));
+
+  const result = await queryLoomLibrary("MINE", 50, null, {});
+
+  assert.equal(result.truncated, false);
+  assert.deepEqual(result.videos.map((video) => video.url), [
+    "https://www.loom.com/share/only-video"
+  ]);
 });
 
 test("keeps the Loom GraphQL inventory query small while preserving titles", () => {
