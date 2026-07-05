@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Chairkick: Export Loom &amp; Cap Videos</title>
+    <link rel="stylesheet" href="../../src/popup.css">
+  </head>
+  <body>
+    <main class="shell">
+      <header class="topbar">
+        <div>
+          <h1>Chairkick Exporter</h1>
+          <p id="page-label">Current tab</p>
+        </div>
+        <button id="refresh" class="icon-button" type="button" title="Collect again" aria-label="Collect again">
+          <svg aria-hidden="true" viewBox="0 0 24 24">
+            <path d="M21 12a9 9 0 1 1-2.64-6.36" />
+            <path d="M21 3v6h-6" />
+          </svg>
+        </button>
+      </header>
+
+      <section id="status" class="status" role="status" aria-live="polite">
+        <span id="status-spinner" class="spinner" aria-hidden="true"></span>
+        <div class="status-copy">
+          <span id="status-label">Collecting videos...</span>
+          <div id="progress-track" class="progress-track" hidden>
+            <span id="progress-bar" class="progress-bar"></span>
+          </div>
+        </div>
+      </section>
+
+      <section id="empty-actions" class="empty-actions" hidden>
+        <button id="open-loom" class="secondary-button" type="button">Open Loom</button>
+        <button id="open-cap" class="secondary-button" type="button">Open Cap</button>
+      </section>
+
+      <section id="results" class="results" hidden>
+        <div id="result-help" class="result-help" hidden></div>
+        <div id="copy-lists" class="copy-lists" hidden></div>
+      </section>
+
+      <section id="warnings" class="warnings" hidden></section>
+    </main>
+    <script src="mock-chrome.js"></script>
+    <script src="../../src/popup.js"></script>
+  </body>
+</html>

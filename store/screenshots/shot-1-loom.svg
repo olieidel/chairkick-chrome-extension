@@ -1,0 +1,32 @@
+<svg width="1280" height="800" viewBox="0 0 1280 800" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1280" y2="800" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#6366f1"></stop>
+      <stop offset="0.55" stop-color="#7c5cf0"></stop>
+      <stop offset="1" stop-color="#f43f5e"></stop>
+    </linearGradient>
+    <radialGradient id="sheen" cx="0.22" cy="0.12" r="1.1">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.14"></stop>
+      <stop offset="0.55" stop-color="#ffffff" stop-opacity="0"></stop>
+    </radialGradient>
+    <clipPath id="shot">
+      <rect x="656" y="104" width="560" height="590" rx="14"></rect>
+    </clipPath>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="14" stdDeviation="22" flood-color="#1e1b4b" flood-opacity="0.45"></feDropShadow>
+    </filter>
+  </defs>
+
+  <rect width="1280" height="800" fill="url(#bg)"></rect>
+  <rect width="1280" height="800" fill="url(#sheen)"></rect>
+
+  <rect x="656" y="104" width="560" height="590" rx="14" fill="#f7f8fa" filter="url(#shadow)"></rect>
+  <image x="656" y="104" width="560" height="590" href="popup-loom.png" clip-path="url(#shot)"></image>
+
+  <g font-family="Helvetica Neue, Helvetica, Arial, sans-serif" fill="#ffffff">
+    <text x="72" y="330" font-size="44" font-weight="700">Your whole Loom library,</text>
+    <text x="72" y="386" font-size="44" font-weight="700">collected in one click</text>
+    <text x="72" y="448" font-size="21" font-weight="500" fill-opacity="0.92">Open loom.com, click the icon, and every video</text>
+    <text x="72" y="480" font-size="21" font-weight="500" fill-opacity="0.92">you recorded is ready to export.</text>
+  </g>
+</svg>
