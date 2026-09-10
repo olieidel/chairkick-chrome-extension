@@ -80,8 +80,10 @@ async function loadShortcutSettings() {
 function renderShortcut(shortcut, enabled) {
   const keys = shortcut ? formatShortcut(shortcut) : "";
 
-  if (keys) {
+  if (keys && enabled) {
     shortcutDescriptionEl.textContent = `${keys} starts a new recording from any tab.`;
+  } else if (keys) {
+    shortcutDescriptionEl.textContent = `Switched off. ${keys} does nothing until you turn it back on.`;
   } else {
     shortcutDescriptionEl.textContent = "No key combination is set — usually because another extension already uses the default. Use “Change keys” to pick one.";
   }

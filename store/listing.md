@@ -1,6 +1,6 @@
 # Chrome Web Store listing — paste-ready copy
 
-Upload package: `dist/chairkick-screen-recorder-loom-export-1.1.0.zip` (rebuild: see README).
+Upload package: `dist/chairkick-screen-recorder-loom-export-1.1.1.zip` (rebuild: see README).
 
 ## Store listing tab
 

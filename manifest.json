@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Chairkick: Screen Recorder & Loom Export",
   "description": "Record your screen and camera with Chairkick in one click, or export your Loom and Cap videos to back them up or migrate.",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "homepage_url": "https://chairkick.com",
   "icons": {
     "16": "icons/icon-16.png",
