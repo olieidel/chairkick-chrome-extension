@@ -50,7 +50,7 @@ Not affiliated with or endorsed by Loom (Atlassian) or Cap. Loom and Cap are tra
 ### Graphics
 
 - **Store icon 128×128:** `icons/icon-128.png`
-- **Screenshots (1280×800, at least one REQUIRED):** first shot = popup open on any page showing the "Record a new video" button; second = popup open over your Loom library showing collected lists. Blur/crop personal video titles you don't want public.
+- **Screenshots (1280×800):** `store/screenshots/shot-0-record.png` (Record button + shortcut settings), `shot-1-loom.png`, `shot-2-cap.png` — all rendered from the harness (`mock.html`) with headless Chrome, composed by the matching `.svg`, converted with `rsvg-convert -w 1280 -h 800`.
 - **Small promo tile 440×280 (optional but shown in search):** `store/promo-tile-small.png`
 - **Marquee 1400×560 (optional):** skip for v1.
 
