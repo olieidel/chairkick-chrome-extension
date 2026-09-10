@@ -1,6 +1,8 @@
-# Chairkick: Export Loom & Cap Videos
+# Chairkick: Screen Recorder & Loom Export
 
-Chrome extension that collects your Loom and Cap videos from the active tab and sends them to [Chairkick](https://chairkick.com) to import — or copies the share URLs so you can paste them into Chairkick's import page yourself.
+Companion Chrome extension for [Chairkick](https://chairkick.com). The popup's "Record a new video" button opens the Chairkick recorder in a new tab (also reachable with the Alt+Shift+R shortcut, which opens the popup with the button focused). Below it, the exporter collects your Loom and Cap videos from the active tab and sends them to Chairkick to import — or copies the share URLs so you can paste them into Chairkick's import page yourself.
+
+The Record button is a plain link: no extra permissions, no auth in the extension. Signed-in users land in their recorder; everyone else gets the no-account recorder and signs up afterwards.
 
 ## Load Locally
 
@@ -20,6 +22,14 @@ cd icons && for size in 16 32 48 128; do rsvg-convert -w $size -h $size icon.svg
 ```
 
 `icon-512.png` is kept for store listing assets.
+
+## Package for the Web Store
+
+```sh
+version=$(node -p "require('./manifest.json').version")
+mkdir -p dist && rm -f "dist/chairkick-screen-recorder-loom-export-${version}.zip"
+zip -r "dist/chairkick-screen-recorder-loom-export-${version}.zip" manifest.json popup.html src icons/icon-16.png icons/icon-32.png icons/icon-48.png icons/icon-128.png -x '*.DS_Store'
+```
 
 ## Test
 

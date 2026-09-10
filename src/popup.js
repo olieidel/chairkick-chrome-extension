@@ -11,6 +11,7 @@ const refreshButton = document.getElementById("refresh");
 const emptyActionsEl = document.getElementById("empty-actions");
 const openLoomButton = document.getElementById("open-loom");
 const openCapButton = document.getElementById("open-cap");
+const recordLink = document.getElementById("record");
 
 const CHAIRKICK_ORIGIN = "https://chairkick.com";
 const LOOM_LIBRARY_URL = "https://www.loom.com/looms/videos";
@@ -21,6 +22,9 @@ let activeRunId = null;
 
 document.addEventListener("DOMContentLoaded", () => {
   bindEvents();
+  // Enter should start a recording when the popup opens from the keyboard
+  // shortcut; the autofocus attribute alone is not reliable in popups.
+  recordLink.focus();
   collectFromActiveTab();
 });
 

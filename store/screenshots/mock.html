@@ -3,23 +3,33 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Chairkick: Export Loom &amp; Cap Videos</title>
+    <title>Chairkick: Screen Recorder &amp; Loom Export</title>
     <link rel="stylesheet" href="../../src/popup.css">
   </head>
   <body>
     <main class="shell">
       <header class="topbar">
         <div>
-          <h1>Chairkick Exporter</h1>
+          <h1>Chairkick</h1>
           <p id="page-label">Current tab</p>
         </div>
-        <button id="refresh" class="icon-button" type="button" title="Collect again" aria-label="Collect again">
+        <button id="refresh" class="icon-button" type="button" title="Collect Loom or Cap videos again" aria-label="Collect Loom or Cap videos again">
           <svg aria-hidden="true" viewBox="0 0 24 24">
             <path d="M21 12a9 9 0 1 1-2.64-6.36" />
             <path d="M21 3v6h-6" />
           </svg>
         </button>
       </header>
+
+      <section class="record">
+        <a id="record" class="primary-button record-button" href="https://chairkick.com/recordings/new?utm_source=chrome_extension&amp;utm_medium=extension" target="_blank" rel="noopener" autofocus>
+          <span class="record-dot" aria-hidden="true"></span>
+          Record a new video
+        </a>
+        <p class="record-hint">Opens the Chairkick recorder in a new tab — screen, camera, and mic.</p>
+      </section>
+
+      <h2 class="section-title">Export Loom &amp; Cap videos</h2>
 
       <section id="status" class="status" role="status" aria-live="polite">
         <span id="status-spinner" class="spinner" aria-hidden="true"></span>

@@ -1,9 +1,9 @@
 {
   "manifest_version": 3,
-  "name": "Chairkick: Export Loom & Cap Videos",
-  "description": "Export your Loom and Cap videos in one click — back them up or migrate your whole library to Chairkick. Viewers always free.",
-  "version": "1.0.0",
-  "homepage_url": "https://chairkick.com/switch-from-loom",
+  "name": "Chairkick: Screen Recorder & Loom Export",
+  "description": "Record your screen and camera with Chairkick in one click, or export your Loom and Cap videos to back them up or migrate.",
+  "version": "1.1.0",
+  "homepage_url": "https://chairkick.com",
   "icons": {
     "16": "icons/icon-16.png",
     "32": "icons/icon-32.png",
@@ -12,12 +12,20 @@
   },
   "action": {
     "default_popup": "popup.html",
-    "default_title": "Export videos to Chairkick",
+    "default_title": "Record or export with Chairkick",
     "default_icon": {
       "16": "icons/icon-16.png",
       "32": "icons/icon-32.png",
       "48": "icons/icon-48.png",
       "128": "icons/icon-128.png"
+    }
+  },
+  "commands": {
+    "_execute_action": {
+      "suggested_key": {
+        "default": "Alt+Shift+R"
+      },
+      "description": "Open Chairkick to record or export"
     }
   },
   "permissions": [

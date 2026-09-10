@@ -11,7 +11,7 @@
 
 ## Project Structure & Module Organization
 
-This is a Manifest V3 Chrome extension for collecting Loom and Cap share URLs.
+This is a Manifest V3 Chrome extension with two jobs: a "Record a new video" link that opens the Chairkick recorder in a new tab (no auth, no extra permissions), and a collector for Loom and Cap share URLs.
 
 - `manifest.json`: extension metadata, popup wiring, and permissions.
 - `popup.html`: popup entry point.

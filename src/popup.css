@@ -66,6 +66,53 @@ h1 {
   white-space: nowrap;
 }
 
+.record {
+  display: grid;
+  gap: 6px;
+}
+
+.record-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  padding: 11px 12px;
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.record-button:hover {
+  filter: brightness(1.06);
+}
+
+.record-button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.record-dot {
+  width: 10px;
+  height: 10px;
+  flex: 0 0 10px;
+  border-radius: 50%;
+  background: #e5484d;
+  box-shadow: 0 0 0 3px rgba(229, 72, 77, 0.35);
+}
+
+.record-hint {
+  color: var(--muted);
+  font-size: 12px;
+  text-align: center;
+}
+
+.section-title {
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 650;
+  text-transform: uppercase;
+}
+
 .status,
 .warnings,
 .results {
