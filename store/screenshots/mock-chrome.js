@@ -78,7 +78,7 @@
       create: async () => ({})
     },
     commands: {
-      getAll: async () => [{ name: "start-recording", shortcut: "Alt+Shift+R", description: "" }]
+      getAll: async () => [{ name: "start-recording", shortcut: "Alt+Shift+K", description: "" }]
     },
     storage: {
       sync: {

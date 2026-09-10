@@ -83,7 +83,7 @@ function renderShortcut(shortcut, enabled) {
   if (keys) {
     shortcutDescriptionEl.textContent = `${keys} starts a new recording from any tab.`;
   } else {
-    shortcutDescriptionEl.textContent = "No key combination is set yet — use “Change keys” to pick one.";
+    shortcutDescriptionEl.textContent = "No key combination is set — usually because another extension already uses the default. Use “Change keys” to pick one.";
   }
 
   recordHintEl.textContent = keys && enabled
@@ -93,7 +93,7 @@ function renderShortcut(shortcut, enabled) {
   shortcutEnabledEl.dataset.shortcut = shortcut;
 }
 
-// Chrome reports "Alt+Shift+R" on every platform; macOS users know the key as Option.
+// Chrome reports "Alt+Shift+K" on every platform; macOS users know the key as Option.
 function formatShortcut(shortcut) {
   const isMac = /Mac|iPhone|iPad/.test(navigator.platform || "");
   return isMac ? shortcut.replace(/\bAlt\b/g, "Option").replace(/\bCtrl\b/g, "Control") : shortcut;

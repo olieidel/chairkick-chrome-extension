@@ -26,7 +26,7 @@
   "commands": {
     "start-recording": {
       "suggested_key": {
-        "default": "Alt+Shift+R"
+        "default": "Alt+Shift+K"
       },
       "description": "Start a new Chairkick recording"
     }
