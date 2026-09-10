@@ -20,18 +20,22 @@
       "128": "icons/icon-128.png"
     }
   },
+  "background": {
+    "service_worker": "src/background.js"
+  },
   "commands": {
-    "_execute_action": {
+    "start-recording": {
       "suggested_key": {
         "default": "Alt+Shift+R"
       },
-      "description": "Open Chairkick to record or export"
+      "description": "Start a new Chairkick recording"
     }
   },
   "permissions": [
     "activeTab",
     "clipboardWrite",
-    "scripting"
+    "scripting",
+    "storage"
   ],
   "host_permissions": [
     "https://chairkick.com/*"

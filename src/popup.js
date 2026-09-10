@@ -12,6 +12,12 @@ const emptyActionsEl = document.getElementById("empty-actions");
 const openLoomButton = document.getElementById("open-loom");
 const openCapButton = document.getElementById("open-cap");
 const recordLink = document.getElementById("record");
+const recordHintEl = document.getElementById("record-hint");
+const settingsEl = document.getElementById("settings");
+const openSettingsButton = document.getElementById("open-settings");
+const shortcutEnabledEl = document.getElementById("shortcut-enabled");
+const shortcutDescriptionEl = document.getElementById("shortcut-description");
+const changeShortcutButton = document.getElementById("change-shortcut");
 
 const CHAIRKICK_ORIGIN = "https://chairkick.com";
 const LOOM_LIBRARY_URL = "https://www.loom.com/looms/videos";
@@ -24,7 +30,9 @@ document.addEventListener("DOMContentLoaded", () => {
   bindEvents();
   // Enter should start a recording when the popup opens from the keyboard
   // shortcut; the autofocus attribute alone is not reliable in popups.
+  recordLink.href = ChairkickRecorder.recorderUrl("popup");
   recordLink.focus();
+  loadShortcutSettings();
   collectFromActiveTab();
 });
 
@@ -34,6 +42,71 @@ function bindEvents() {
   openLoomButton.addEventListener("click", () => chrome.tabs.create({ url: LOOM_LIBRARY_URL }));
   openCapButton.addEventListener("click", () => chrome.tabs.create({ url: CAP_LIBRARY_URL }));
   chrome.runtime.onMessage.addListener(handleRuntimeMessage);
+  openSettingsButton.addEventListener("click", toggleSettings);
+  shortcutEnabledEl.addEventListener("change", saveShortcutEnabled);
+  changeShortcutButton.addEventListener("click", () => chrome.tabs.create({ url: "chrome://extensions/shortcuts" }));
+}
+
+function toggleSettings() {
+  settingsEl.hidden = !settingsEl.hidden;
+  openSettingsButton.setAttribute("aria-expanded", String(!settingsEl.hidden));
+  if (!settingsEl.hidden) shortcutEnabledEl.focus();
+}
+
+// The key combination is Chrome's to assign; we only read it back and decide
+// whether pressing it does anything (see background.js).
+async function loadShortcutSettings() {
+  let shortcut = "";
+  let enabled = true;
+
+  try {
+    const commands = await chrome.commands.getAll();
+    shortcut = (commands.find((command) => command.name === "start-recording") || {}).shortcut || "";
+  } catch {
+    shortcut = "";
+  }
+
+  try {
+    const stored = await chrome.storage.sync.get("shortcutEnabled");
+    enabled = stored.shortcutEnabled !== false;
+  } catch {
+    enabled = true;
+  }
+
+  shortcutEnabledEl.checked = enabled;
+  renderShortcut(shortcut, enabled);
+}
+
+function renderShortcut(shortcut, enabled) {
+  const keys = shortcut ? formatShortcut(shortcut) : "";
+
+  if (keys) {
+    shortcutDescriptionEl.textContent = `${keys} starts a new recording from any tab.`;
+  } else {
+    shortcutDescriptionEl.textContent = "No key combination is set yet — use “Change keys” to pick one.";
+  }
+
+  recordHintEl.textContent = keys && enabled
+    ? `Opens the Chairkick recorder in a new tab — or press ${keys} from any tab.`
+    : "Opens the Chairkick recorder in a new tab — screen, camera, and mic.";
+
+  shortcutEnabledEl.dataset.shortcut = shortcut;
+}
+
+// Chrome reports "Alt+Shift+R" on every platform; macOS users know the key as Option.
+function formatShortcut(shortcut) {
+  const isMac = /Mac|iPhone|iPad/.test(navigator.platform || "");
+  return isMac ? shortcut.replace(/\bAlt\b/g, "Option").replace(/\bCtrl\b/g, "Control") : shortcut;
+}
+
+async function saveShortcutEnabled() {
+  const enabled = shortcutEnabledEl.checked;
+  try {
+    await chrome.storage.sync.set({ shortcutEnabled: enabled });
+  } catch {
+    // The toggle still reflects the choice for this popup; it just will not persist.
+  }
+  renderShortcut(shortcutEnabledEl.dataset.shortcut || "", enabled);
 }
 
 async function activeTab() {

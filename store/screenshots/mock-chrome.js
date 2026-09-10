@@ -66,11 +66,25 @@
 
   const dataset = datasets[state] || datasets.loom;
 
+  // ?settings=open renders the popup with the settings panel expanded.
+  if (new URLSearchParams(location.search).get("settings") === "open") {
+    window.addEventListener("DOMContentLoaded", () => document.getElementById("open-settings").click());
+  }
+
   let executeCalls = 0;
   window.chrome = {
     tabs: {
       query: async () => [{ id: 1, url: dataset.result.page.url }],
       create: async () => ({})
+    },
+    commands: {
+      getAll: async () => [{ name: "start-recording", shortcut: "Alt+Shift+R", description: "" }]
+    },
+    storage: {
+      sync: {
+        get: async () => ({ shortcutEnabled: true }),
+        set: async () => {}
+      }
     },
     runtime: {
       onMessage: { addListener: () => {} },

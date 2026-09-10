@@ -1,6 +1,6 @@
 # Chairkick: Screen Recorder & Loom Export
 
-Companion Chrome extension for [Chairkick](https://chairkick.com). The popup's "Record a new video" button opens the Chairkick recorder in a new tab (also reachable with the Alt+Shift+R shortcut, which opens the popup with the button focused). Below it, the exporter collects your Loom and Cap videos from the active tab and sends them to Chairkick to import — or copies the share URLs so you can paste them into Chairkick's import page yourself.
+Companion Chrome extension for [Chairkick](https://chairkick.com). The popup's "Record a new video" button opens the Chairkick recorder in a new tab. The Alt+Shift+R shortcut (Option+Shift+R on a Mac) opens the recorder directly from any tab; the gear icon in the popup shows the current keys, lets you switch the shortcut off, and links to `chrome://extensions/shortcuts`, the only place Chrome lets the key combination be changed. Below it, the exporter collects your Loom and Cap videos from the active tab and sends them to Chairkick to import — or copies the share URLs so you can paste them into Chairkick's import page yourself.
 
 The Record button is a plain link: no extra permissions, no auth in the extension. Signed-in users land in their recorder; everyone else gets the no-account recorder and signs up afterwards.
 

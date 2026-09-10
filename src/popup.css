@@ -66,6 +66,87 @@ h1 {
   white-space: nowrap;
 }
 
+.topbar-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.settings {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  display: grid;
+  gap: 12px;
+  padding: 12px;
+}
+
+.settings .section-title {
+  margin-top: 0;
+}
+
+.setting-row {
+  align-items: center;
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+}
+
+.setting-copy {
+  cursor: pointer;
+  display: grid;
+  gap: 2px;
+}
+
+.setting-title {
+  font-weight: 650;
+}
+
+.setting-hint {
+  color: var(--muted);
+  font-size: 12px;
+  max-width: 340px;
+}
+
+.switch {
+  appearance: none;
+  background: var(--line-strong);
+  border: 0;
+  border-radius: 999px;
+  cursor: pointer;
+  flex: 0 0 36px;
+  height: 20px;
+  margin: 0;
+  position: relative;
+  transition: background 120ms ease;
+  width: 36px;
+}
+
+.switch::after {
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+  content: "";
+  height: 16px;
+  left: 2px;
+  position: absolute;
+  top: 2px;
+  transition: transform 120ms ease;
+  width: 16px;
+}
+
+.switch:checked {
+  background: var(--accent);
+}
+
+.switch:checked::after {
+  transform: translateX(16px);
+}
+
+.switch:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
 .record {
   display: grid;
   gap: 6px;

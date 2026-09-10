@@ -13,7 +13,7 @@ Upload package: `dist/chairkick-screen-recorder-loom-export-1.1.0.zip` (rebuild:
 
 Record your screen in one click — and export your Loom and Cap videos when you're ready to move.
 
-Chairkick: Screen Recorder & Loom Export is the companion extension for Chairkick, the async video platform where viewers are always free. Click the icon (or press Alt+Shift+R) to start a new screen recording, or open your Loom or Cap library to move your whole video collection over in minutes.
+Chairkick: Screen Recorder & Loom Export is the companion extension for Chairkick, the async video platform where viewers are always free. Click the icon (or press Alt+Shift+R — change or switch it off in the popup's settings) to start a new screen recording, or open your Loom or Cap library to move your whole video collection over in minutes.
 
 RECORD YOUR SCREEN
 • One click opens the Chairkick recorder in a new tab — nothing to download or install
@@ -32,7 +32,7 @@ Loom's free plan is now capped at 25 videos (lifetime) with a 5-minute limit, an
 Chairkick imports each video via its share link, keeps the title, and adds an AI summary and transcript. Your videos get a fresh link you control.
 
 WHAT IT DOES
-• Starts a new Chairkick screen recording from any tab
+• Starts a new Chairkick screen recording from any tab — click the icon or press the keyboard shortcut (Alt+Shift+R by default; change or disable it in the popup's settings)
 • Collects your full Loom library (up to thousands of videos), not just the links visible on the page
 • Works with Cap (cap.so) too, including self-hosted Cap instances
 • Groups videos into "My videos" and "workspace videos" so you only migrate what's yours
@@ -67,6 +67,9 @@ Not affiliated with or endorsed by Loom (Atlassian) or Cap. Loom and Cap are tra
 
 - **clipboardWrite justification:**
   The "Copy" buttons copy the collected share-URL lists to the user's clipboard.
+
+- **storage justification:**
+  Remembers one setting: whether the keyboard shortcut is enabled. Nothing else is stored.
 
 - **Host permission (https://chairkick.com/*) justification:**
   The "Send to Chairkick" button submits the collected share links to chairkick.com to prepare the user's import. No other hosts are contacted.

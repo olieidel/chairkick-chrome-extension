@@ -13,20 +13,43 @@
           <h1>Chairkick</h1>
           <p id="page-label">Current tab</p>
         </div>
-        <button id="refresh" class="icon-button" type="button" title="Collect Loom or Cap videos again" aria-label="Collect Loom or Cap videos again">
-          <svg aria-hidden="true" viewBox="0 0 24 24">
-            <path d="M21 12a9 9 0 1 1-2.64-6.36" />
-            <path d="M21 3v6h-6" />
-          </svg>
-        </button>
+        <div class="topbar-actions">
+          <button id="open-settings" class="icon-button" type="button" title="Settings" aria-label="Settings" aria-expanded="false" aria-controls="settings">
+            <svg aria-hidden="true" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="3" />
+              <path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z" />
+            </svg>
+          </button>
+          <button id="refresh" class="icon-button" type="button" title="Collect Loom or Cap videos again" aria-label="Collect Loom or Cap videos again">
+            <svg aria-hidden="true" viewBox="0 0 24 24">
+              <path d="M21 12a9 9 0 1 1-2.64-6.36" />
+              <path d="M21 3v6h-6" />
+            </svg>
+          </button>
+        </div>
       </header>
+
+      <section id="settings" class="settings" hidden>
+        <h2 class="section-title">Settings</h2>
+        <div class="setting-row">
+          <label class="setting-copy" for="shortcut-enabled">
+            <span class="setting-title">Keyboard shortcut</span>
+            <span id="shortcut-description" class="setting-hint">Starts a new recording from any tab.</span>
+          </label>
+          <input id="shortcut-enabled" class="switch" type="checkbox" checked>
+        </div>
+        <div class="setting-row">
+          <p class="setting-hint">Chrome only lets you change the key combination on its own shortcuts page.</p>
+          <button id="change-shortcut" class="secondary-button" type="button">Change keys</button>
+        </div>
+      </section>
 
       <section class="record">
         <a id="record" class="primary-button record-button" href="https://chairkick.com/recordings/new?utm_source=chrome_extension&amp;utm_medium=extension" target="_blank" rel="noopener" autofocus>
           <span class="record-dot" aria-hidden="true"></span>
           Record a new video
         </a>
-        <p class="record-hint">Opens the Chairkick recorder in a new tab — screen, camera, and mic.</p>
+        <p id="record-hint" class="record-hint">Opens the Chairkick recorder in a new tab — screen, camera, and mic.</p>
       </section>
 
       <h2 class="section-title">Export Loom &amp; Cap videos</h2>
@@ -54,6 +77,7 @@
       <section id="warnings" class="warnings" hidden></section>
     </main>
     <script src="mock-chrome.js"></script>
+    <script src="../../src/recorder_url.js"></script>
     <script src="../../src/popup.js"></script>
   </body>
 </html>

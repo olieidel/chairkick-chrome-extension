@@ -16,7 +16,9 @@ This is a Manifest V3 Chrome extension with two jobs: a "Record a new video" lin
 - `manifest.json`: extension metadata, popup wiring, and permissions.
 - `popup.html`: popup entry point.
 - `src/collector.js`: page scanning and URL normalization; UMD-wrapped for Chrome and Node tests.
-- `src/popup.js`: popup UI behavior and Chrome extension API calls.
+- `src/popup.js`: popup UI behavior and Chrome extension API calls, including the settings panel.
+- `src/background.js`: service worker that handles the `start-recording` keyboard command and honors the stored on/off setting.
+- `src/recorder_url.js`: the recorder URL builder shared by the popup and the worker.
 - `src/popup.css`: popup styling.
 - `test/collector.test.js`: collector internals tested with Node's built-in runner.
 
@@ -46,4 +48,4 @@ Pull requests should include a short description, user-facing behavior changed, 
 
 ## Security & Configuration Tips
 
-The extension relies on `activeTab`, `scripting`, and `clipboardWrite`. Avoid broader host permissions unless required. Do not log page contents, cookies, tokens, or collected private URLs beyond local debugging needs.
+The extension relies on `activeTab`, `scripting`, `clipboardWrite`, and `storage` (one boolean: whether the shortcut is enabled). Avoid broader host permissions unless required. Do not log page contents, cookies, tokens, or collected private URLs beyond local debugging needs.
