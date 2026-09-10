@@ -16,7 +16,8 @@
 
   <image x="36" y="78" width="124" height="124" href="tile-icon.png"></image>
 
-  <text x="186" y="124" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="26" font-weight="700" fill="#ffffff">Export your</text>
-  <text x="186" y="156" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="26" font-weight="700" fill="#ffffff">Loom &amp; Cap videos</text>
-  <text x="186" y="192" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="14" font-weight="500" fill="#ffffff" fill-opacity="0.85">chairkick.com</text>
+  <text x="186" y="112" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="23" font-weight="700" fill="#ffffff">Record your screen</text>
+  <text x="186" y="142" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="23" font-weight="700" fill="#ffffff">in one click</text>
+  <text x="186" y="172" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13" font-weight="500" fill="#ffffff" fill-opacity="0.9">+ export your Loom &amp; Cap videos</text>
+  <text x="186" y="196" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="14" font-weight="500" fill="#ffffff" fill-opacity="0.85">chairkick.com</text>
 </svg>
